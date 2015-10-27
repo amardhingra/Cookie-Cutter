@@ -13,27 +13,18 @@ public class Player implements cc2.sim.Player {
 
 	private Random gen = new Random();
 
-	public Shape cutter(int length, Shape[] shapes, Shape[] opponent_shapes)
+	public Shape cutter(int length, Shape[] shapes, Shape[] opponentShapes)
 	{
-		// check if first try of given cutter length
-		Point[] cutter = new Point [length];
-		if (row_2.length != cutter.length - 1) {
-			// save cutter length to check for retries
-			row_2 = new boolean [cutter.length - 1];
-			for (int i = 0 ; i != cutter.length ; ++i)
-				cutter[i] = new Point(i, 0);
-		} else {
-			// pick a random cell from 2nd row but not same
-			int i;
-			do {
-				i = gen.nextInt(cutter.length - 1);
-			} while (row_2[i]);
-			row_2[i] = true;
-			cutter[cutter.length - 1] = new Point(i, 1);
-			for (i = 0 ; i != cutter.length - 1 ; ++i)
-				cutter[i] = new Point(i, 0);
+		Shape shape = null;
+		if(length == 11){
+			shape = ShapeGenerator.getNextElevenShape(shapes, opponentShapes);
+		} else if(length == 8){
+			shape = ShapeGenerator.getNextEightShape(shapes, opponentShapes);
+		} else if(length == 5){
+			shape = ShapeGenerator.getNextFiveShape(shapes, opponentShapes);
 		}
-		return new Shape(cutter);
+
+		return shape;
 	}
 
 	public Move cut(Dough dough, Shape[] shapes, Shape[] opponent_shapes)
