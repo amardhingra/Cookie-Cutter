@@ -19,7 +19,6 @@ public class Player implements cc2.sim.Player {
             shape = ShapeGenerator.getNextFiveShape(shapes, opponentShapes);
         }
 
-        System.out.println("Shape:" + shape);
         return shape;
     }
 
@@ -44,35 +43,13 @@ public class Player implements cc2.sim.Player {
 
     public Move cut(Dough dough, Shape[] shapes, Shape[] opponent_shapes) {
 
-        ArrayList<Move> elevenMoves = new ArrayList<>();
-        ArrayList<Move> eightMoves = new ArrayList<>();
-        ArrayList<Move> fiveMoves = new ArrayList<>();
+        HashMap<Integer, ArrayList<Move>> moveSet = Utils.generateMoves(dough, shapes);
 
-        for (int shapeNumber = 0; shapeNumber < shapes.length; shapeNumber++) {
-        	Shape[] rotations = shapes[shapeNumber].rotations();
-        	 for (int rotNumber = 0; rotNumber < rotations.length; rotNumber++) {
-		        for (int i = 0; i < dough.side(); i++) {
-		            for (int j = 0; j < dough.side(); j++) {
-		                Point p = new Point(i, j);
-                        if (dough.cuts(rotations[rotNumber], p)) {
-                            switch (shapes[shapeNumber].size()) {
-                                case 11:
-                                    elevenMoves.add(new Move(shapeNumber, rotNumber, p));
-                                    break;
-                                case 8:
-                                    eightMoves.add(new Move(shapeNumber, rotNumber, p));
-                                    break;
-                                case 5:
-                                default:
-                                    fiveMoves.add(new Move(shapeNumber, rotNumber, p));
-                                    break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        ArrayList<Move> elevenMoves = moveSet.get(11);
+        ArrayList<Move> eightMoves = moveSet.get(8);
+        ArrayList<Move> fiveMoves = moveSet.get(5);
 
+        System.out.println("Moves: " + Utils.totalMoves(moveSet));
         return getBestMove(dough, elevenMoves, eightMoves, fiveMoves);
 
     }
