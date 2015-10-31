@@ -9,6 +9,8 @@ import java.util.*;
 
 public class Player implements cc2.sim.Player {
 
+    private ArrayList<Move> moveHistory = new ArrayList<>();
+
     public Shape cutter(int length, Shape[] shapes, Shape[] opponentShapes) {
         Shape shape = null;
         if (length == 11) {
@@ -50,7 +52,10 @@ public class Player implements cc2.sim.Player {
         ArrayList<Move> fiveMoves = moveSet.get(5);
 
         System.out.println("Moves: " + Utils.totalMoves(moveSet));
-        return getBestMove(dough, elevenMoves, eightMoves, fiveMoves);
+        Move nextMove = getBestMove(dough, elevenMoves, eightMoves, fiveMoves);
 
+        moveHistory.add(nextMove);
+
+        return nextMove;
     }
 }
