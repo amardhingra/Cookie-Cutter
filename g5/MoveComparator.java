@@ -28,11 +28,15 @@ public class MoveComparator implements Comparator<Move> {
 	    int n21 = getOptMove(o2, oponent, dough);
 	    int n22= getOptMove(o2, oponent, dough);
 	    //double dis2 = Utils.averageDistanceFromOurMoves(o2.point, moveHistory, self);
-		if(n12 == 0)
-			return -1;
-		if(n22 == 0)
-			return 1;
-	    return n21 / n22 - n11 / n12;
+//		if(n12 == 0)
+//			return -1;
+//		if(n22 == 0)
+//			return 1;
+//		if(n21 / n22 > n11 / n12){
+//			return 1;
+//		}else if(n21 / n22 < n11 / n12)
+//			return -1;
+	    return n21 - n11;
 	}
 	
 	// Input required: Current dough, move to be made, set of all shapes(by opponent/ours) depending on the one we are computing for
@@ -43,7 +47,7 @@ public class MoveComparator implements Comparator<Move> {
         ModdableDough cut_dough = cut_with_move(curr_dough, move, shapes);
         HashMap<Integer, ArrayList<Move>> move_set = Utils.generateMoves(cut_dough, shapes);
         int totalMoves = Utils.totalMoves(move_set);
-//        System.out.println("Total moves are : "+totalMoves);
+        System.out.println("Total moves are : "+totalMoves);
         return totalMoves;
     }
 
