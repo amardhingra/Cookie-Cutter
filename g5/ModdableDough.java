@@ -5,6 +5,9 @@ import cc2.sim.Point;
 import cc2.sim.Shape;
 
 public class ModdableDough extends Dough {
+
+	private boolean[][] dough;
+
 	public ModdableDough(Dough dough) {
 		super(dough.side());
 		Point[] s = {new Point(0,0)};
@@ -16,4 +19,15 @@ public class ModdableDough extends Dough {
 			}
 		}
 	}
+
+	// perform cut using shape (simulator calls this)
+	public boolean undoCut(Shape shape, Point q)
+	{
+		for (Point p : shape) {
+			dough[p.i + q.i][p.j + q.j] = false;
+		}
+		
+		return true;
+	}
+
 }
