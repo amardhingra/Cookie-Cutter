@@ -24,27 +24,28 @@ public class Player implements cc2.sim.Player {
         return shape;
     }
 
-    public Move getBestMove(Dough dough, ArrayList<Move> elevenMoves, ArrayList<Move> eightMoves, ArrayList<Move> fiveMoves){
-        if(dough.uncut()){
-        	return fiveMoves.get(0);
-        }
-        
-//    	if(elevenMoves.size() > 0) {
-//    		if(elevenMoves.size() > 1)
-//    			return elevenMoves.get(1);
-//            return elevenMoves.get(0);
-//        } else if(eightMoves.size() > 0){
-//        	if(eightMoves.size() > 1)
-//    			return eightMoves.get(1);
-//            return eightMoves.get(0);
-//        } else {
-//        	if(fiveMoves.size() > 1)
-//    			return fiveMoves.get(1);
-//            return fiveMoves.get(0);
+//    public Move getBestMove(Dough dough, ArrayList<Move> elevenMoves, ArrayList<Move> eightMoves, ArrayList<Move> fiveMoves){
+//        if(dough.uncut()){
+//        	return fiveMoves.get(0);
 //        }
-    }
+//        
+////    	if(elevenMoves.size() > 0) {
+////    		if(elevenMoves.size() > 1)
+////    			return elevenMoves.get(1);
+////            return elevenMoves.get(0);
+////        } else if(eightMoves.size() > 0){
+////        	if(eightMoves.size() > 1)
+////    			return eightMoves.get(1);
+////            return eightMoves.get(0);
+////        } else {
+////        	if(fiveMoves.size() > 1)
+////    			return fiveMoves.get(1);
+////            return fiveMoves.get(0);
+////        }
+//    }
 
     public Move cut(Dough dough, Shape[] shapes, Shape[] opponent_shapes) {
+    	System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!cutting");
     	priorityQueue = new PriorityQueue<Move>(new MoveComparator(shapes, opponent_shapes, dough, moveHistory));
     	
         HashMap<Integer, ArrayList<Move>> moveSet = Utils.generateMoves(dough, shapes);
@@ -52,7 +53,12 @@ public class Player implements cc2.sim.Player {
         ArrayList<Move> elevenMoves = moveSet.get(11);
         ArrayList<Move> eightMoves = moveSet.get(8);
         ArrayList<Move> fiveMoves = moveSet.get(5);
-        if(elevenMoves.size() != 0){
+        System.out.println("ele: " + elevenMoves.size());
+        System.out.println("eig: " + eightMoves.size());
+        System.out.println("five: " + fiveMoves.size());
+        if(dough.uncut()){
+        	pushToPriorityQueue(fiveMoves, priorityQueue);
+        }else if(elevenMoves.size() != 0){
         	pushToPriorityQueue(elevenMoves, priorityQueue);
         }else if(eightMoves.size() != 0){
         	pushToPriorityQueue(eightMoves, priorityQueue);
@@ -60,16 +66,22 @@ public class Player implements cc2.sim.Player {
         	pushToPriorityQueue(fiveMoves, priorityQueue);
         }
         System.out.println("Moves: " + Utils.totalMoves(moveSet));
+        
         Move nextMove = priorityQueue.poll();
         //getBestMove(dough, elevenMoves, eightMoves, fiveMoves);
-
+        
         moveHistory.add(nextMove);
-
+       
         return nextMove;
     }
     public void pushToPriorityQueue(ArrayList<Move> moves, PriorityQueue<Move> priorityQueue){
+    	int count  = 0;
     	for(Move move : moves){
+    		if(count > 10)
+    			break;
     		priorityQueue.add(move);
+    		count++;
+    		System.out.println(move.shape + " " + move.rotation + " " + move.point.i + " " + move.point.j);
     	}
     }
 }
