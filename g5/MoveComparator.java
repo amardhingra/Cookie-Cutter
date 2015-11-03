@@ -25,11 +25,6 @@ public class MoveComparator implements Comparator<MoveCosts> {
     @Override
     public int compare(MoveCosts o1, MoveCosts o2) {
         return o1.cost > o2.cost ? 1 : -1;
-        //int n11 = getOptMove(o1.move, self, dough);
-        //int n12 = getOptMove(o1.move, oponent, dough);
-        //int n21 = getOptMove(o2.move, oponent, dough);
-        //int n22 = getOptMove(o2.move, oponent, dough);
-        //return n21 / n11;
     }
 
     // Input required: Current dough, move to be made, set of all shapes(by opponent/ours) depending on the one we are computing for
