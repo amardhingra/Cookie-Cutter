@@ -41,7 +41,6 @@ public class Utils {
         for(Integer i : moveSet.keySet()){
             count += moveSet.get(i).size();
         }
-
         return count;
     }
 
