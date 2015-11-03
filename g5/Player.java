@@ -12,7 +12,7 @@ public class Player implements cc2.sim.Player {
     private ArrayList<Move> moveHistory = new ArrayList<>();
     private PriorityQueue<MoveCosts> priorityQueue;
 
-    public static final int NUMBER_OF_MOVES = 100;
+    public static final int NUMBER_OF_MOVES = 250;
 
     public Shape cutter(int length, Shape[] shapes, Shape[] opponentShapes) {
         Shape shape = null;
@@ -48,7 +48,6 @@ public class Player implements cc2.sim.Player {
             pushToPriorityQueue(priorityQueue, fiveMoves, dough, shapes, opponentShapes);
 
         }
-        System.out.println("Moves: " + Utils.totalMoves(moveSet));
 
         Move nextMove = priorityQueue.poll().move;
 
