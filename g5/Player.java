@@ -77,8 +77,6 @@ public class Player implements cc2.sim.Player {
 
     public void pushToPriorityQueue(ArrayList<Move> moves, PriorityQueue<MoveCosts> priorityQueue) {
         int count = 0;
-
-
         for (Move move : moves) {
             if (count > 20)
                 break;
