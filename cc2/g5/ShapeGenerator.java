@@ -24,25 +24,25 @@ public class ShapeGenerator {
     }
 
     public static Shape getNextEightShape(Shape[] shapes, Shape[] opponentShapes) {
-        Shape pis = get_fitted_shape(opponentShapes[0], 8, 0);
-        if (pis != null)
+        Shape ad_shape = get_fitted_shape(opponentShapes[0], 8, 0);
+        if (ad_shape != null)
         {   System.out.println("Returning it for 8 *- "+opponentShapes[0].size());
-            return pis;
+            return ad_shape;
         }
         else
-            {System.out.println("Returning DEF");}
+            {System.out.println("Returning default");}
 
         return eightShapes[eightPos++];
     }
 
     public static Shape getNextFiveShape(Shape[] shapes, Shape[] opponentShapes) {
-        Shape pis = get_fitted_shape(opponentShapes[0], 5, 0);
-        // if (pis != null)
-        // {   System.out.println("Returning it for 5 *- "+opponentShapes[0].size());
-        //     return pis;
-        // }
-        // else
-        //     {System.out.println("Returning DEF");}
+        Shape ad_shape = get_fitted_shape(opponentShapes[0], 5, 0);
+        if (ad_shape != null)
+        {   System.out.println("Returning it for 5 *- "+opponentShapes[0].size());
+            return ad_shape;
+        }
+        else
+            {System.out.println("Returning default");}
         return fiveShapes[fivePos++];
     }
 
@@ -178,16 +178,10 @@ public class ShapeGenerator {
     private static Shape generateBlock() {
         Point[] shape = new Point[5];
 
-        // shape[0] = new Point(0, 0);
-        // shape[1] = new Point(0, 1);
-        // shape[2] = new Point(1, 0);
-        // shape[3] = new Point(1, 1);
-        // shape[4] = new Point(2, 0);
-
         shape[0] = new Point(0, 0);
-        shape[1] = new Point(1, 1);
+        shape[1] = new Point(0, 1);
         shape[2] = new Point(1, 0);
-        shape[3] = new Point(2, 1);
+        shape[3] = new Point(1, 1);
         shape[4] = new Point(2, 0);
 
         return new Shape(shape);
@@ -297,6 +291,7 @@ public class ShapeGenerator {
     public static Shape get_fitted_shape(Shape f_shape, int length, int retry)
     {   // For a given shape, finds it's min and max value i.e its dimensions; Makes a dough of that dimension. 
         if (fitted_shape_used == true) return null;
+        System.out.println("retry : "+retry);
         ArrayList<Point> max_points = new ArrayList<Point>(); 
         int padding = retry;
         Point dimensions = getDimensions(f_shape);
@@ -305,17 +300,14 @@ public class ShapeGenerator {
         // Finds all uncut points; if connected pushes points into stack
         mDough.cut(f_shape, get_coordinate(retry));
         Stack<Point> conn_comp = new Stack<Point>();
-        int count = 0;
         while (!mDough.saturated()) { 
-            System.out.println("cuts: "+mDough.countCut());
         Point init = findAvailablePoint(mDough);
-        if (init == null) return null;
         conn_comp.push(init);
         ArrayList<Point> points = new ArrayList<Point>(); 
         points.add(init);
         mDough.cut(init);
 
-        conn_comp_loop:
+        // conn_comp_loop:
         while (!conn_comp.isEmpty()) {
             Point next = conn_comp.pop();
             Point[] neighbors = next.neighbors();
@@ -325,8 +317,8 @@ public class ShapeGenerator {
                 mDough.cut(neighbors[i]);
                 points.add(neighbors[i]);
 
-                if (points.size() == length)
-                    break conn_comp_loop;
+                // if (points.size() == length)
+                //     break conn_comp_loop;
                 }
             }
         }
@@ -356,10 +348,6 @@ public class ShapeGenerator {
         minJ = Math.min(minJ, p.j);
         maxJ = Math.max(maxJ, p.j);
     }
-    int I = maxI - minI + 1;
-    int J = maxJ - minJ + 1;
-    System.out.println("I values : "+ I);
-    System.out.println("J values : "+ J);
     return new Point(maxI - minI + 1, maxJ - minJ + 1);
     }
 
