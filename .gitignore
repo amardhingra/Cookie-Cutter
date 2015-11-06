@@ -1,7 +1,7 @@
 *.class
 *.idea
 *~
-
+*"Icon\r"
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
