@@ -3,10 +3,10 @@ package cc2.sim;
 public class Dough {
 
 	// the array
-	private boolean[][] dough;
+	protected boolean[][] dough;
 
 	// number of cuts
-	private int n_cuts;
+	protected int n_cuts;
 
 	// create new Dough
 	public Dough(int side)
