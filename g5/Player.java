@@ -1,5 +1,6 @@
 package cc2.g5;
 
+import cc2.g6.Util;
 import cc2.sim.Point;
 import cc2.sim.Shape;
 import cc2.sim.Dough;
@@ -29,7 +30,7 @@ public class Player implements cc2.sim.Player {
 
     public Move cut(Dough dough, Shape[] shapes, Shape[] opponentShapes) {
         priorityQueue = new PriorityQueue<>(new MoveComparator(shapes, opponentShapes, dough, moveHistory));
-
+        
         HashMap<Integer, ArrayList<Move>> moveSet = Utils.generateMoves(dough, shapes);
 
         ArrayList<Move> elevenMoves = moveSet.get(11);
@@ -37,39 +38,43 @@ public class Player implements cc2.sim.Player {
         ArrayList<Move> fiveMoves = moveSet.get(5);
 
         if (dough.uncut()) {
-            priorityQueue.add(new MoveCosts(fiveMoves.get(0), 0, 0));
+            priorityQueue.add(new MoveCosts(fiveMoves.get(0), 0, 0, 0));
         } else if (elevenMoves.size() != 0) {
-            pushToPriorityQueue(priorityQueue, elevenMoves, dough, shapes, opponentShapes);
+            pushToPriorityQueue(shapes, priorityQueue, elevenMoves, dough, shapes, opponentShapes);
 
         } else if (eightMoves.size() != 0) {
-            pushToPriorityQueue(priorityQueue, eightMoves, dough, shapes, opponentShapes);
+            pushToPriorityQueue(shapes, priorityQueue, eightMoves, dough, shapes, opponentShapes);
 
         } else if (fiveMoves.size() != 0) {
-            pushToPriorityQueue(priorityQueue, fiveMoves, dough, shapes, opponentShapes);
+            pushToPriorityQueue(shapes, priorityQueue, fiveMoves, dough, shapes, opponentShapes);
 
         }
 
         Move nextMove = priorityQueue.poll().move;
 
         moveHistory.add(nextMove);
-
+        debugMove(nextMove);
         return nextMove;
     }
-
-    public void pushToPriorityQueue(PriorityQueue<MoveCosts> priorityQueue, ArrayList<Move> moves, Dough dough, Shape[] cutters, Shape[] oppCutters){
+    public void debugMove(Move move){
+    	System.out.println("i: " + move.point.i + " j: " + move.point.j);
+    }
+    public void pushToPriorityQueue(Shape[] shapes, PriorityQueue<MoveCosts> priorityQueue, ArrayList<Move> moves, Dough dough, Shape[] cutters, Shape[] oppCutters){
 
         int i = 0;
+        Point centerPoint = Utils.getCenterOfAllMoves(dough);
         for(Move m : moves){
             if(i++ == NUMBER_OF_MOVES)
                 break;
-
+            Point moveCenterPoint = Utils.getCenterOfAMove(shapes, m);
+            double distance = Utils.distance(moveCenterPoint, centerPoint);
             ModdableDough mDough = new ModdableDough(dough);
             mDough.cut(cutters[m.shape].rotations()[m.rotation], m.point);
 
             int playerMoves = Utils.totalMoves(Utils.generateMoves(mDough, cutters));
             int opponentMoves = Utils.totalMoves(Utils.generateMoves(mDough, oppCutters));
-
-            priorityQueue.add(new MoveCosts(m, playerMoves, opponentMoves));
+            
+            priorityQueue.add(new MoveCosts(m, playerMoves, opponentMoves, distance));
 
         }
 
@@ -80,9 +85,10 @@ public class Player implements cc2.sim.Player {
         for (Move move : moves) {
             if (count > 20)
                 break;
-            priorityQueue.add(new MoveCosts(move, 0, 0));
+            priorityQueue.add(new MoveCosts(move, 0, 0, 0));
             count++;
             System.out.println(move.shape + " " + move.rotation + " " + move.point.i + " " + move.point.j);
         }
     }
+    
 }

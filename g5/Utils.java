@@ -43,23 +43,50 @@ public class Utils {
         }
         return count;
     }
-
-    public static double averageDistanceFromAllMoves(Dough dough, Point p1){
-
-        double distance = 0;
-        int points = 0;
-
+    public static double distance(Point p1, Point p2){
+    	return Math.sqrt(Math.hypot(p1.i - p2.i, p1.j - p2.j));
+    }
+    public static Point getCenterOfAllMoves(Dough dough){
+        int centerX = 0;
+        int centerY = 0;
+        int totalNum = 0;
         for (int i = 0; i < dough.side(); ++i) {
             for (int j = 0; j < dough.side(); ++j) {
                 if(!dough.uncut(i, j)){
-                    distance += Math.hypot(i - p1.i, j - p1.j);
+                    centerX += i;
+                    centerY += j;
+                    totalNum++;
                 }
             }
         }
-
-        return points > 0 ? distance / points : 1;
+        if(totalNum == 0){
+        	centerX = 0;
+        	centerY = 0;
+        }else{
+	        centerX /= totalNum;
+	        centerY /= totalNum;
+        }
+        System.out.println("center: " + centerX + " " + centerY);
+        return new Point(centerX, centerY); 
     }
-
+    public static Point getCenterOfAMove(Shape[] shapes, Move move){
+    	Shape shape = shapes[move.shape].rotations()[move.rotation];
+    	Iterator<Point> itr = shape.iterator();
+    	int centerI = 0;
+    	int centerJ = 0;
+    	int totalNum = 0;
+    	while(itr.hasNext()){
+    		Point point = (Point)itr.next();
+    		centerI += point.i;
+    		centerJ += point.j;
+    		totalNum++;
+    	}
+    	centerI /= totalNum;
+    	centerJ /= totalNum;
+    	centerI += move.point.i;
+    	centerJ += move.point.j;
+    	return new Point(centerI, centerJ);
+    }
     public static double averageDistanceFromOurMoves(Point p1, ArrayList<Move> moves, Shape[] shapes){
 
         if(moves.size() == 0){
@@ -77,5 +104,6 @@ public class Utils {
 
         return distance/moves.size();
     }
+    
 
 }

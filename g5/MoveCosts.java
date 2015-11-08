@@ -9,12 +9,12 @@ public class MoveCosts {
     public int opponentMoves;
     public float cost;
 
-    public MoveCosts(Move m, int pm, int om){
+    public MoveCosts(Move m, int pm, int om, double distance){
         this.move = m;
 
         this.playerMoves = pm;
         this.opponentMoves = om;
 
-        cost = (float)opponentMoves/(float)playerMoves;
+        cost = (float)opponentMoves / (float)playerMoves; // + 1 / (float)distance);
     }
 }
