@@ -25,25 +25,19 @@ public class ShapeGenerator {
     }
 
     public static Shape getNextEightShape(Shape[] shapes, Shape[] opponentShapes) {
-        /*Shape ad_shape = getFittedShape(opponentShapes[0], 8, 0);
-        if (ad_shape != null) {
-            System.out.println("Returning it for 8 *- " + opponentShapes[0].size());
-            return ad_shape;
-        } else {
-            System.out.println("Returning default");
-        }*/
-
         return eightShapes[eightPos++];
     }
 
     public static Shape getNextFiveShape(Shape[] shapes, Shape[] opponentShapes) {
         Shape ad_shape = getFittedShape(opponentShapes[0], 5, 0);
         if (ad_shape != null) {
-            System.out.println("Returning it for 5 *- " + opponentShapes[0].size());
+            System.out.println("Returning it for size 5: " + opponentShapes[0].size());
+            if (ad_shape.equals(fiveShapes[fivePos])){/* To avoid repeated cutter error in retry cutter! */
+                fivePos++; 
+            }
             return ad_shape;
-        } else {
-            System.out.println("Returning default");
         }
+        System.out.println("Returning default : "+fivePos);
         return fiveShapes[fivePos++];
     }
 
@@ -333,7 +327,7 @@ public class ShapeGenerator {
             points.add(init);
             mDough.cut(init);
 
-            // conn_comp_loop:
+            conn_comp_loop:
             while (!conn_comp.isEmpty()) {
                 Point next = conn_comp.pop();
                 Point[] neighbors = next.neighbors();
@@ -343,6 +337,8 @@ public class ShapeGenerator {
                         mDough.cut(neighbors[i]);
                         points.add(neighbors[i]);
                     }
+                    // if (points.size() == length) 
+                    //     break conn_comp_loop;
                 }
             }
             if (points.size() == length) {
