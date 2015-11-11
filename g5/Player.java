@@ -93,16 +93,16 @@ public class Player implements cc2.sim.Player {
             int minY = Math.max(0, m.point.j - maxSide);
             int maxY = Math.min(dough.side(), m.point.j + maxSide);
 
-            int playerMovesBefore = Utils.totalMoves(Utils.generateMoves(mDough, minX, maxX, minY, maxY, cutters));
-            int opponentMovesBefore = Utils.totalMoves(Utils.generateMoves(mDough, minX, maxX, minY, maxY, cutters));
+            //int playerMovesBefore = Utils.totalMoves(Utils.generateMoves(mDough, minX, maxX, minY, maxY, cutters));
+            //int opponentMovesBefore = Utils.totalMoves(Utils.generateMoves(mDough, minX, maxX, minY, maxY, cutters));
 
             mDough.cut(cutters[m.shape].rotations()[m.rotation], m.point);
 
             int playerMovesAfter = Utils.totalMoves(Utils.generateMoves(mDough, cutters));
             int opponentMovesAfter = Utils.totalMoves(Utils.generateMoves(mDough, cutters));
 
-            float playerMoves = (float)playerMovesAfter/(float)playerMovesBefore;
-            float opponentMoves = (float)opponentMovesAfter/(float)opponentMovesBefore;
+            float playerMoves = playerMovesAfter;//(float)playerMovesAfter/(float)playerMovesBefore;
+            float opponentMoves = opponentMovesAfter;//(float)opponentMovesAfter/(float)opponentMovesBefore;
             
             mDough.undoCut(cutters[m.shape].rotations()[m.rotation], m.point);
 

@@ -11,13 +11,13 @@ public class ShapeGenerator {
 
     // add a pi
     private static boolean fittedShapeUsed = false;
-    private static Shape[] elevenShapes = {generateDiag(11), generateE(), generateS(), generateF(11), generateH(), generateLine(11)};
+    private static Shape[] elevenShapes = {generateDiag(11), generateAntiDiag(11), generateAlmostDiag(true), generateAlmostDiag(false), generateLine(11)};
     private static int elevenPos = 0;
 
-    private static Shape[] eightShapes = {generateCondensedDiag(true), generateCondensedDiag(false), generateDiag(8), generateF(8), generateY(), generateLine(8), generateL()};
+    private static Shape[] eightShapes = {generateCondensedDiag(true), generateCondensedDiag(false), generateDiag(8), generateAntiDiag(8), generateLine(8)};
     private static int eightPos = 0;
 
-    private static Shape[] fiveShapes = {generateBlock(true), generateBlock(false), generateDiag(5), generatePlus(), generateT(), generateLine(5), generateU()};
+    private static Shape[] fiveShapes = {generateBlock(true), generateBlock(false), generateDiag(5), generateAntiDiag(5), generateU()};
     private static int fivePos = 0;
 
     public static Shape getNextElevenShape(Shape[] shapes, Shape[] opponentShapes) {
@@ -262,6 +262,29 @@ public class ShapeGenerator {
         return new Shape(shape);
     }
 
+    private static Shape generateAlmostDiag(boolean left){
+
+        Point[] shape = new Point[11];
+
+        shape[0] = new Point(0, 0);
+        shape[1] = new Point(0, 1);
+        shape[2] = new Point(1, 1);
+        shape[3] = new Point(1, 2);
+        shape[4] = new Point(2, 2);
+        shape[5] = new Point(2, 3);
+        shape[6] = new Point(3, 3);
+        shape[7] = new Point(3, 4);
+        shape[8] = new Point(4, 4);
+        shape[9] = new Point(4, 5);
+        if(left){
+            shape[10] = new Point(4, 6);
+        } else {
+            shape[10] = new Point(5, 4);
+        }
+
+        return new Shape(shape);
+    }
+
     private static Shape generateDiag(int size) {
         Point[] shape = new Point[size];
 
@@ -278,6 +301,27 @@ public class ShapeGenerator {
         if (size > 8) {
             shape[8] = new Point(4, 4);
             shape[9] = new Point(4, 5);
+            shape[10] = new Point(5, 5);
+        }
+        return new Shape(shape);
+    }
+
+    private static Shape generateAntiDiag(int size) {
+        Point[] shape = new Point[size];
+
+        shape[0] = new Point(0, 0);
+        shape[1] = new Point(1, 0);
+        shape[2] = new Point(1, 1);
+        shape[3] = new Point(2, 1);
+        shape[4] = new Point(2, 2);
+        if (size > 5) {
+            shape[5] = new Point(3, 2);
+            shape[6] = new Point(3, 3);
+            shape[7] = new Point(4, 3);
+        }
+        if (size > 8) {
+            shape[8] = new Point(4, 4);
+            shape[9] = new Point(5, 4);
             shape[10] = new Point(5, 5);
         }
         return new Shape(shape);
