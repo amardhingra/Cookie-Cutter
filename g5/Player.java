@@ -62,7 +62,7 @@ public class Player implements cc2.sim.Player {
             oppMoveNeighborSet.addAll(neighborSet);
             if (neighborSet.size() != 0) {
                 moveSet = Utils.generateMovesNearOpponetMove(dough, shapes, neighborSet);
-                if(moveSet.get(11).size() == 0){
+                if (moveSet.get(11).size() == 0) {
                     moveSet = Utils.generateMoves(dough, shapes);
                 }
             }
@@ -93,8 +93,6 @@ public class Player implements cc2.sim.Player {
             pushToPriorityQueue(priorityQueue, fiveMoves, dough, shapes, opponentShapes);
 
         } else {
-            System.out.println("what..");
-            System.out.println(moveSet);
         }
 
         Move nextMove = priorityQueue.poll().move;
@@ -167,8 +165,6 @@ public class Player implements cc2.sim.Player {
                 }
             }
         }
-//		Point[] oppShape = new Point[opponetMove.size()];
-//	    opponetMove.toArray(oppShape);
         return opponetMove;
     }
 
@@ -180,9 +176,9 @@ public class Player implements cc2.sim.Player {
 
     private Set<Point> getNeighbors(Set<Point> points) {
 
-        Set<Point> neighbors = new HashSet<Point>();
+        Set<Point> neighbors = new HashSet<>();
         for (Point point : points) {
-            neighbors.addAll(new HashSet<Point>(Arrays.asList(point.neighbors())));
+            neighbors.addAll(new HashSet<>(Arrays.asList(point.neighbors())));
         }
         return neighbors;
     }
