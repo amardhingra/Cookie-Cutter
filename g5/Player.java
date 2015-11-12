@@ -18,7 +18,7 @@ public class Player implements cc2.sim.Player {
     public static final int NUMBER_OF_MOVES = 1000;
     public static int maxSide = 0;
     private boolean isStraightLine = false;
-    private Set<Point> oppMoveNeighborSet = new HashSet<Point>();
+    private Set<Point> oppMoveNeighborSet = new HashSet<>();
 
     public Shape cutter(int length, Shape[] shapes, Shape[] opponentShapes) {
         Shape shape = null;
@@ -101,15 +101,12 @@ public class Player implements cc2.sim.Player {
         return nextMove;
     }
 
-    public void debugMove(Move move){
-    	// System.out.println("i: " + move.point.i + " j: " + move.point.j);
-    }
     public boolean isMoveSetEmpty(HashMap<Integer, ArrayList<Move>> map){
     	int[] nums = {11, 8 , 5};
     	int count = 0;
-    	System.out.println(map);
+    	//System.out.println(map);
     	for(int n : nums){
-    		System.out.println("n: " + n);
+    		//System.out.println("n: " + n);
     		count += map.get(n) != null ? map.get(n).size() : 0;
     	}
     	return count == 0;
@@ -134,28 +131,20 @@ public class Player implements cc2.sim.Player {
             int minY = Math.max(0, m.point.j - maxSide);
             int maxY = Math.min(dough.side(), m.point.j + ourMoveDimentionPoint.j + maxSide);
             //TODO should be modified to the real box region, add height and width to x and y
-//            int playerMovesBefore = Utils.totalMoves(Utils.generateMoves(mDough, minX, maxX, minY, maxY, cutters));
-//            int opponentMovesBefore = Utils.totalMoves(Utils.generateMoves(mDough, minX, maxX, minY, maxY, cutters));
+
             HashMap<Integer, ArrayList<Move>> playerMovesBeforeHashMap = Utils.generateMoves(mDough, minX, maxX, minY, maxY, cutters);
             HashMap<Integer, ArrayList<Move>> opponentMovesBeforeHashMap = Utils.generateMoves(mDough, minX, maxX, minY, maxY, oppCutters);
             mDough.cut(cutters[m.shape].rotations()[m.rotation], m.point);
 
-//            int playerMovesAfter = Utils.totalMoves(Utils.generateMoves(mDough, cutters));
-//            int opponentMovesAfter = Utils.totalMoves(Utils.generateMoves(mDough, cutters));
-//            int opDiff = opponentMovesBefore - opponentMovesAfter;
-//            int ourDiff = playerMovesBefore - playerMovesAfter;
             HashMap<Integer, ArrayList<Move>> playerMovesAfterHashMap = Utils.generateMoves(mDough, minX, maxX, minY, maxY, cutters);
             HashMap<Integer, ArrayList<Move>> opponentMovesAfterHashMap = Utils.generateMoves(mDough, minX, maxX, minY, maxY, oppCutters);
             int opDiff = Utils.calDiffWithWeight(opponentMovesBeforeHashMap, opponentMovesAfterHashMap);
             int ourDiff = Utils.calDiffWithWeight(playerMovesBeforeHashMap, playerMovesAfterHashMap);
-//          int ourDiff = playerMovesBefore - playerMovesAfter;
-            //float playerMoves = playerMovesAfter;//(float)playerMovesAfter/(float)playerMovesBefore;
-            //float opponentMoves = opponentMovesAfter;//(float)opponentMovesAfter/(float)opponentMovesBefore;
+
             
             mDough.undoCut(cutters[m.shape].rotations()[m.rotation], m.point);
 
             priorityQueue.add(new MoveCosts(m, opDiff, ourDiff, (float)distance));
-            //priorityQueue.add(new MoveCosts(m, playerMoves, opponentMoves, distance));
 
         }
 

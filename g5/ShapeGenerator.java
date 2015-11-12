@@ -11,10 +11,10 @@ public class ShapeGenerator {
 
     // add a pi
     private static boolean fittedShapeUsed = false;
-    private static Shape[] elevenShapes = {generateDiag(11), generateAlmostDiag(true), generateAlmostDiag(false), generateLine(11)};
+    private static Shape[] elevenShapes = {generateDiag(11), generateAlmostDiag(true), generateAlmostDiag(false), generateLine(11), generateS()};
     private static int elevenPos = 0;
 
-    private static Shape[] eightShapes = {generateCondensedDiag(true), generateCondensedDiag(false), generateDiag(8), generateAntiDiag(8), generateLine(8) };
+    private static Shape[] eightShapes = {generate8Block(), generateCondensedDiag(true), generateCondensedDiag(false), generateDiag(8), generateAntiDiag(8), generateLine(8) };
     private static int eightPos = 0;
 
     private static Shape[] fiveShapes = {generateBlock(true), generateBlock(false), generateDiag(5), generateAntiDiag(5), generateU()};
@@ -263,6 +263,21 @@ public class ShapeGenerator {
         return new Shape(shape);
     }
 
+    public static Shape generate8Block(){
+        Point[] shape = new Point[8];
+
+        shape[0] = new Point(0, 0);
+        shape[1] = new Point(0, 1);
+        shape[2] = new Point(0, 2);
+        shape[3] = new Point(0, 3);
+        shape[4] = new Point(1, 0);
+        shape[5] = new Point(1, 1);
+        shape[6] = new Point(1, 2);
+        shape[7] = new Point(1, 3);
+
+        return new Shape(shape);
+    }
+
     private static Shape generateCondensedDiag(boolean left){
         Point[] shape = new Point[8];
 
@@ -373,6 +388,7 @@ public class ShapeGenerator {
         System.out.println("get_coordinate: " + co_ordinate);
         return co_ordinate;
     }
+
 
 
     public static Shape getFittedShape(Shape f_shape, int length, int retry) {
