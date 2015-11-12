@@ -13,7 +13,7 @@ public class ShapeGenerator {
     private static Shape[] elevenShapes = {generateDiag(11), generateAlmostDiag(true), generateAlmostDiag(false), generateLine(11), generateS()};
     private static int elevenPos = 0;
 
-    private static Shape[] eightLines = {generateLine(8), generateAlmostLine(8, true), generateAlmostLine(8, false)};
+    private static Shape[] eightLines = {generateLine(8), generateAlmostLine(8, true)};
     private static int eightLinePos = 0;
     private static Shape[] eightShapes = {generate8Block(), generateCondensedDiag(true), generateCondensedDiag(false), generateDiag(8), generateAntiDiag(8), generateLine(8)};
     private static int eightPos = 0;
