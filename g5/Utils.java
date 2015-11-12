@@ -133,23 +133,26 @@ public class Utils {
 					}
 				}
 				moveSet.put(cutters[shapeNumber].size(), moves);
-			}	
+			}
 			if(!tmp){
 				removableHashSet.add(p);
 			}
+            if(moveSet.size() > 0){
+                break;
+            }
 		}
 		points.removeAll(removableHashSet);
 
 		return moveSet;
 	}
 	public static void debugPoint(Point p){
-		System.out.println("i: " + p.i + ", j: " + p.j);
+		//System.out.println("i: " + p.i + ", j: " + p.j);
 	}
 	public static int calDiffWithWeight(HashMap<Integer, ArrayList<Move>> before, HashMap<Integer, ArrayList<Move>> after){
 		int[] nums = {11, 8, 5};
 		int count  = 0;
 		for(int n: nums){
-			count += n * (before.get(n).size() - after.get(n).size());
+			count += (before.get(n).size() - after.get(n).size()) * n;
 		}
 		return count;
 	}

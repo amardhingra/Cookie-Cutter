@@ -15,7 +15,7 @@ public class Player implements cc2.sim.Player {
     private ArrayList<Move> moveHistory = new ArrayList<>();
     private PriorityQueue<MoveCosts> priorityQueue;
     private ModdableDough doughCache = null;
-    public static final int NUMBER_OF_MOVES = 1000;
+    public static final int NUMBER_OF_MOVES = 5000;
     public static int maxSide = 0;
     private boolean isStraightLine = false;
     private Set<Point> oppMoveNeighborSet = new HashSet<>();
@@ -25,7 +25,7 @@ public class Player implements cc2.sim.Player {
         if (length == 11) {
             shape = ShapeGenerator.getNextElevenShape(shapes, opponentShapes);
         } else if (length == 8) {
-        	isStraightLine = LineShaped(opponentShapes[0]);
+            isStraightLine = LineShaped(opponentShapes[0]);
             shape = ShapeGenerator.getNextEightShape(shapes, opponentShapes);
         } else if (length == 5) {
             shape = ShapeGenerator.getNextFiveShape(shapes, opponentShapes);
@@ -34,41 +34,48 @@ public class Player implements cc2.sim.Player {
         return shape;
     }
 
-    public int getMaxDimensions(Shape[] opponentShapes){
+    public int getMaxDimensions(Shape[] opponentShapes) {
         int max = Integer.MIN_VALUE;
 
-        for(int i=0; i<opponentShapes.length; i++){
+        for (int i = 0; i < opponentShapes.length; i++) {
             Point dimensions = ShapeGenerator.getDimensions(opponentShapes[i]);
-            if(Math.max(dimensions.i, dimensions.j) > max)
+            if (Math.max(dimensions.i, dimensions.j) > max)
                 max = Math.max(dimensions.i, dimensions.j);
         }
-        return max;         
+        return max;
     }
-    
+
 
     public Move cut(Dough dough, Shape[] shapes, Shape[] opponentShapes) {
-    	
+
         priorityQueue = new PriorityQueue<>(new MoveComparator(shapes, opponentShapes, dough, moveHistory));
         maxSide = getMaxDimensions(opponentShapes);
         HashMap<Integer, ArrayList<Move>> moveSet = null;
-        
-        if(isStraightLine && !dough.uncut()){
-        	if(doughCache == null)
-        		doughCache = new ModdableDough(dough);
-        	
-        	Set<Point> opponentRecentMove = getOpponentRecentMove(dough);
-        	
-        	Set<Point> neighborSet = getNeighbors(opponentRecentMove);
-        	oppMoveNeighborSet.addAll(neighborSet);
-        	if(neighborSet.size() != 0)
-        		moveSet = Utils.generateMovesNearOpponetMove(dough, shapes, neighborSet);
-        	
+
+        if (isStraightLine && !dough.uncut()) {
+            if (doughCache == null)
+                doughCache = new ModdableDough(dough);
+
+            Set<Point> opponentRecentMove = getOpponentRecentMove(dough);
+
+            Set<Point> neighborSet = getNeighbors(opponentRecentMove);
+            oppMoveNeighborSet.addAll(neighborSet);
+            if (neighborSet.size() != 0) {
+                moveSet = Utils.generateMovesNearOpponetMove(dough, shapes, neighborSet);
+                if(moveSet.get(11).size() == 0){
+                    moveSet = Utils.generateMoves(dough, shapes);
+                }
+            }
+
         }
-        if(isStraightLine && (moveSet == null || isMoveSetEmpty(moveSet))){
-        	moveSet = Utils.generateMovesNearOpponetMove(dough, shapes, oppMoveNeighborSet);
+
+        if (isStraightLine && (moveSet == null || isMoveSetEmpty(moveSet))) {
+            moveSet = Utils.generateMovesNearOpponetMove(dough, shapes, oppMoveNeighborSet);
         }
-        if(moveSet == null || isMoveSetEmpty(moveSet))
-        	moveSet = Utils.generateMoves(dough, shapes);
+
+        if (moveSet == null || isMoveSetEmpty(moveSet)) {
+            moveSet = Utils.generateMoves(dough, shapes);
+        }
 
         ArrayList<Move> elevenMoves = moveSet.get(11);
         ArrayList<Move> eightMoves = moveSet.get(8);
@@ -85,41 +92,42 @@ public class Player implements cc2.sim.Player {
         } else if (fiveMoves.size() != 0) {
             pushToPriorityQueue(priorityQueue, fiveMoves, dough, shapes, opponentShapes);
 
-        }else{
-        	System.out.println("what..");
-        	System.out.println(moveSet);
+        } else {
+            System.out.println("what..");
+            System.out.println(moveSet);
         }
 
         Move nextMove = priorityQueue.poll().move;
 
         moveHistory.add(nextMove);
         // debugMove(nextMove);
-        if(isStraightLine){
-        	doughCache = new ModdableDough(dough);
-        	doughCache.cut(shapes[nextMove.shape].rotations()[nextMove.rotation], nextMove.point);
+        if (isStraightLine) {
+            doughCache = new ModdableDough(dough);
+            doughCache.cut(shapes[nextMove.shape].rotations()[nextMove.rotation], nextMove.point);
         }
         return nextMove;
     }
 
-    public boolean isMoveSetEmpty(HashMap<Integer, ArrayList<Move>> map){
-    	int[] nums = {11, 8 , 5};
-    	int count = 0;
-    	//System.out.println(map);
-    	for(int n : nums){
-    		//System.out.println("n: " + n);
-    		count += map.get(n) != null ? map.get(n).size() : 0;
-    	}
-    	return count == 0;
+    public boolean isMoveSetEmpty(HashMap<Integer, ArrayList<Move>> map) {
+        int[] nums = {11, 8, 5};
+        int count = 0;
+        //System.out.println(map);
+        for (int n : nums) {
+            //System.out.println("n: " + n);
+            count += map.get(n) != null ? map.get(n).size() : 0;
+        }
+        return count == 0;
     }
-    public void pushToPriorityQueue(PriorityQueue<MoveCosts> priorityQueue, ArrayList<Move> moves, Dough dough, Shape[] cutters, Shape[] oppCutters){
+
+    public void pushToPriorityQueue(PriorityQueue<MoveCosts> priorityQueue, ArrayList<Move> moves, Dough dough, Shape[] cutters, Shape[] oppCutters) {
 
         int i = 0;
         Point centerPoint = Utils.centerOfMass(dough);
         ModdableDough mDough = new ModdableDough(dough);
 
-        for(Move m : moves){
+        for (Move m : moves) {
 
-            if(i++ == NUMBER_OF_MOVES)
+            if (i++ == NUMBER_OF_MOVES)
                 break;
 
             Point moveCenterPoint = Utils.getCenterOfAMove(cutters, m);
@@ -141,39 +149,41 @@ public class Player implements cc2.sim.Player {
             int opDiff = Utils.calDiffWithWeight(opponentMovesBeforeHashMap, opponentMovesAfterHashMap);
             int ourDiff = Utils.calDiffWithWeight(playerMovesBeforeHashMap, playerMovesAfterHashMap);
 
-            
             mDough.undoCut(cutters[m.shape].rotations()[m.rotation], m.point);
 
-            priorityQueue.add(new MoveCosts(m, opDiff, ourDiff, (float)distance));
+            priorityQueue.add(new MoveCosts(m, opDiff, ourDiff, (float) distance));
 
         }
 
     }
+
     private Set<Point> getOpponentRecentMove(Dough dough) {
-		Set<Point> opponetMove = new HashSet<Point>();
-		for(int i = 0; i < dough.side(); i++) {
-			for(int j = 0; j < dough.side(); j++) {
-				if(doughCache.uncut(i,j) && !dough.uncut(i,j)) {
-					Utils.debugPoint(new Point(i,j));
-					opponetMove.add(new Point(i,j));
-				}
-			}
-		}
+        Set<Point> opponetMove = new HashSet<Point>();
+        for (int i = 0; i < dough.side(); i++) {
+            for (int j = 0; j < dough.side(); j++) {
+                if (doughCache.uncut(i, j) && !dough.uncut(i, j)) {
+                    Utils.debugPoint(new Point(i, j));
+                    opponetMove.add(new Point(i, j));
+                }
+            }
+        }
 //		Point[] oppShape = new Point[opponetMove.size()];
 //	    opponetMove.toArray(oppShape);
-		return  opponetMove;
-	}
-    public boolean LineShaped(Shape opponentShape){
+        return opponetMove;
+    }
+
+    public static boolean LineShaped(Shape opponentShape) {
         if (opponentShape.equals(ShapeGenerator.generateLine(11)) || opponentShape.equals(ShapeGenerator.generateLongL(11, true)) || opponentShape.equals(ShapeGenerator.generateLongL(11, false)))
             return true;
         return false;
     }
+
     private Set<Point> getNeighbors(Set<Point> points) {
-    	
-		Set<Point> neighbors = new HashSet<Point>();
-		for(Point point: points) {
-			neighbors.addAll(new HashSet<Point>(Arrays.asList(point.neighbors())));
-		}
-		return neighbors;
-	}
+
+        Set<Point> neighbors = new HashSet<Point>();
+        for (Point point : points) {
+            neighbors.addAll(new HashSet<Point>(Arrays.asList(point.neighbors())));
+        }
+        return neighbors;
+    }
 }
