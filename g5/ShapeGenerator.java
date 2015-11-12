@@ -11,16 +11,17 @@ public class ShapeGenerator {
 
     // add a pi
     private static boolean fittedShapeUsed = false;
-    private static Shape[] elevenShapes = {generateDiag(11), generateE(), generateS(), generateF(11), generateH(), generateLine(11)};
+    private static Shape[] elevenShapes = {generateLine(11), generateDiag(11), generateE(), generateS(), generateF(11), generateH(), generateLine(11)};
     private static int elevenPos = 0;
 
-    private static Shape[] eightShapes = {generateCondensedDiag(true), generateCondensedDiag(false), generateDiag(8), generateF(8), generateY(), generateLine(8), generateL()};
+    private static Shape[] eightShapes = {generateLine(8), generateCondensedDiag(true), generateCondensedDiag(false), generateDiag(8), generateF(8), generateY(), generateLine(8), generateL()};
     private static int eightPos = 0;
 
-    private static Shape[] fiveShapes = {generateBlock(true), generateBlock(false), generateDiag(5), generatePlus(), generateT(), generateLine(5), generateU()};
+    private static Shape[] fiveShapes = {generateLine(5), generateBlock(true), generateBlock(false), generateDiag(5), generatePlus(), generateT(), generateU()};
     private static int fivePos = 0;
 
     public static Shape getNextElevenShape(Shape[] shapes, Shape[] opponentShapes) {
+   
         return elevenShapes[elevenPos++];
     }
 

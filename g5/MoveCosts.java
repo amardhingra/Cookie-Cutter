@@ -8,6 +8,7 @@ public class MoveCosts {
     public float playerMoves;
     public float opponentMoves;
     public float cost;
+    public int ourDiff;
 
 //    public MoveCosts(Move m, float pm, float om, double distance){
 //        this.move = m;
@@ -19,6 +20,7 @@ public class MoveCosts {
 //    }
     //TODO: maybe we should create two constructor, one for straight line
     public MoveCosts(Move m, int opDiff, int ourDiff, float distance){
+    	this.ourDiff = ourDiff;
     	this.move = m;
     	if(opDiff == 0){
     		this.cost = Integer.MAX_VALUE;
@@ -26,6 +28,7 @@ public class MoveCosts {
     		//TODO this.cost = distance * (ourBefore - ourAfter) / (oPbefore - oPafter);
     		//don't know whether this will be better...
     		//smaller better
+    		//looks like without distance it's performance is better
     		this.cost = ourDiff / opDiff;
     	}
     }

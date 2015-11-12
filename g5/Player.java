@@ -77,11 +77,16 @@ public class Player implements cc2.sim.Player {
         if (dough.uncut()) {
             priorityQueue.add(new MoveCosts(fiveMoves.get(0), 0, 0, 0));
         } else if (elevenMoves.size() != 0) {
+        	
             pushToPriorityQueue(priorityQueue, elevenMoves, dough, shapes, opponentShapes);
-
+            if(priorityQueue.peek().cost == Integer.MAX_VALUE)
+            	pushToPriorityQueue(priorityQueue, eightMoves, dough, shapes, opponentShapes);
+            if(priorityQueue.peek().cost == Integer.MAX_VALUE)
+            	pushToPriorityQueue(priorityQueue, fiveMoves, dough, shapes, opponentShapes);
         } else if (eightMoves.size() != 0) {
             pushToPriorityQueue(priorityQueue, eightMoves, dough, shapes, opponentShapes);
-
+            if(priorityQueue.peek().cost == Integer.MAX_VALUE)
+            	pushToPriorityQueue(priorityQueue, fiveMoves, dough, shapes, opponentShapes);
         } else if (fiveMoves.size() != 0) {
             pushToPriorityQueue(priorityQueue, fiveMoves, dough, shapes, opponentShapes);
 
@@ -89,7 +94,10 @@ public class Player implements cc2.sim.Player {
         	System.out.println("what..");
         	System.out.println(moveSet);
         }
-
+        //If all our shapes can not block opponent, then try to maxmize the moves we can make
+        if(priorityQueue.peek().cost == Integer.MAX_VALUE){
+        	reArrangeCost(priorityQueue);
+        }
         Move nextMove = priorityQueue.poll().move;
 
         moveHistory.add(nextMove);
@@ -189,4 +197,12 @@ public class Player implements cc2.sim.Player {
 		}
 		return neighbors;
 	}
+    private void reArrangeCost(PriorityQueue<MoveCosts> priorityQueue){
+    	System.out.println("rearrage");
+    	PriorityQueue<MoveCosts> tmpPriorityQueue = new PriorityQueue<>(new ConstructiveMoveComparator());
+    	
+    	tmpPriorityQueue.addAll(priorityQueue);
+    	
+    	priorityQueue = tmpPriorityQueue;
+    }
 }
