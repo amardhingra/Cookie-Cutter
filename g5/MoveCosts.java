@@ -26,7 +26,7 @@ public class MoveCosts {
     		//TODO this.cost = distance * (ourBefore - ourAfter) / (oPbefore - oPafter);
     		//don't know whether this will be better...
     		//smaller better
-    		this.cost = distance * ourDiff / opDiff;
+    		this.cost = ourDiff / opDiff;
     	}
     }
 }

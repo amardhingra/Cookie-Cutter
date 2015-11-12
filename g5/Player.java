@@ -108,6 +108,8 @@ public class Player implements cc2.sim.Player {
     	int[] nums = {11, 8 , 5};
     	int count = 0;
     	System.out.println(map);
+    	if(map.size() == 0)
+    		return true;
     	for(int n : nums){
     		System.out.println("n: " + n);
     		count += map.get(n).size();
