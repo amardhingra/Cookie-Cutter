@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class ShapeGenerator {
 
     private static boolean fittedShapeUsed = false;
-    private static Shape[] elevenShapes = {generateDiag(11), generateAlmostDiag(true), generateAlmostDiag(false), generateLine(11), generateS()};
+    private static Shape[] elevenShapes = {generateLine(11), generateDiag(11), generateAlmostDiag(true), generateAlmostDiag(false), generateS()};
     private static int elevenPos = 0;
 
     private static Shape[] eightLines = {generateLine(8), generateAlmostLine(8, true)};
@@ -18,8 +18,10 @@ public class ShapeGenerator {
     private static Shape[] eightShapes = {generate8Block(), generateCondensedDiag(true), generateCondensedDiag(false), generateDiag(8), generateAntiDiag(8), generateLine(8)};
     private static int eightPos = 0;
 
-    private static Shape[] fiveShapes = {generateBlock(true), generateBlock(false), generateDiag(5), generateAntiDiag(5), generateU()};
+    private static Shape[] fiveShapes = {generateLine(5), generateBlock(true), generateBlock(false), generateDiag(5), generateAntiDiag(5), generateU()};
     private static int fivePos = 0;
+
+    private static Shape fittedCutter = null;
 
 
     public static Shape getNextElevenShape(Shape[] shapes, Shape[] opponentShapes) {
@@ -37,14 +39,18 @@ public class ShapeGenerator {
     public static Shape getNextFiveShape(Shape[] shapes, Shape[] opponentShapes) {
         Shape ad_shape = getFittedShape(opponentShapes[0], 5, 0);
         if (ad_shape != null) {
-            System.out.println("Returning it for size 5: " + opponentShapes[0].size());
             if (ad_shape.equals(fiveShapes[fivePos])){
                 /* To avoid repeated cutter error in retry cutter! */
                 fivePos++;
             }
+            fittedCutter = ad_shape;
             return ad_shape;
         }
-        System.out.println("Returning default : "+fivePos);
+
+        if(fittedCutter != null && fiveShapes[fivePos].equals(fittedCutter)){
+            fivePos++;
+        }
+
         return fiveShapes[fivePos++];
     }
 
