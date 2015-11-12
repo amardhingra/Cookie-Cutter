@@ -160,7 +160,6 @@ public class Player implements cc2.sim.Player {
         for (int i = 0; i < dough.side(); i++) {
             for (int j = 0; j < dough.side(); j++) {
                 if (doughCache.uncut(i, j) && !dough.uncut(i, j)) {
-                    Utils.debugPoint(new Point(i, j));
                     opponetMove.add(new Point(i, j));
                 }
             }
