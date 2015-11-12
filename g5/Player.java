@@ -110,7 +110,7 @@ public class Player implements cc2.sim.Player {
     	System.out.println(map);
     	for(int n : nums){
     		System.out.println("n: " + n);
-    		count += map.get(n).size();
+    		count += map.get(n) != null ? map.get(n).size() : 0;
     	}
     	return count == 0;
     }
